@@ -99,20 +99,25 @@ if run_btn:
 
         # --- 渲染 Manim ---
         # 这是一个小技巧：使用 temp_dir 来处理 Manim 的输出
+        # --- 渲染 Manim (确保使用临时目录) ---
         with tempfile.TemporaryDirectory() as tmp_dir:
-            # 配置 Manim
+            # 这是一个关键配置：告诉 Manim 把所有媒体文件写到临时目录
             config.media_dir = tmp_dir
             config.pixel_height = 720 
             config.pixel_width = 1280
             config.frame_rate = 30
-            config.verbosity = "ERROR" # 减少日志输出
+            config.verbosity = "ERROR" # 减少日志输出，防止 Streamlit 日志过多
             
             try:
                 scene = MonteCarloScene()
-                scene.render()
+                # 渲染
+                scene.render() 
                 
                 # 获取生成的视频路径
+                # 由于我们设置了 config.media_dir，所以路径会自动指向 tmp_dir
                 video_path = str(scene.renderer.file_writer.movie_file_path)
+                
+                # ... (Streamlit 展示视频 st.video(video_path))
                 
                 progress_bar.progress(100, text="渲染完成！")
                 st.video(video_path)
@@ -188,3 +193,4 @@ with st.expander("🎓 为什么这能算出 π？(点击展开原理)"):
     4.  **结论**：
         * $\pi \approx 4 \times \frac{\text{圆内点数}}{\text{总点数}}$
     """)
+
