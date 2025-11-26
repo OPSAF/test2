@@ -1,4 +1,4 @@
 streamlit
-manim==0.17.3  
+manim
 numpy
 Pillow==9.5.0 
